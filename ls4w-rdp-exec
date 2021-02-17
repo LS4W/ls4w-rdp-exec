@@ -1,0 +1,55 @@
+#!/bin/bash
+domain=""
+user=""
+password=""
+computer=""
+app="cmd"
+app_cmd=""
+
+POSITIONAL=()
+while [[ $# -gt 0 ]]
+do
+key="$1"
+
+case $key in
+
+-d|--domain)	
+	domain="$2"
+	shift
+	shift
+	;;
+
+-u|--user)
+	user="$2"
+	shift
+	shift
+	;;
+
+-p|--password)
+	password="$2"
+	shift
+	shift
+	;;
+
+-c|--computer)
+	computer="$2"
+	shift
+	shift
+	;;
+
+-e|--exec)
+	app_cmd="$2"
+	shift
+	shift
+	;;
+
+esac
+done
+
+if [ -z $domain ] ; then
+	domain=$computer
+fi
+
+xfreerdp /d:"$domain" /u:"$user" /p:"$password" /v:"$computer" /app:"$app" /app-cmd:"\"/C $app_cmd\"" &> ls4w-rdp-exec.log &
+wait
+echo "FreeRDP Closed. Check log for any errors."
